@@ -41,8 +41,10 @@ public List<Author> find(){
 }
 
     @Override
-    public void update(Author author) {
-
+    public void update(Long id, Author author) {
+        jdbcTemplate.update(
+                "Update authors SET id = ?, name = ?, age = ?"
+        ,author.getId(),author.getName(),author.getAge());
     }
 
     public static class AuthorRowMapper implements RowMapper<Author> {
