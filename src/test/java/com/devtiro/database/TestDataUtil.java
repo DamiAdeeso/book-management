@@ -37,7 +37,7 @@ public final class TestDataUtil {
 
     public static Book createTestBookA() {
         Book book = Book.builder()
-                .isbn("2345")
+                .isbn("1234")
                 .authorId(1L)
                 .title("The Best Book")
                 .build();
@@ -45,16 +45,16 @@ public final class TestDataUtil {
     }
     public static Book createTestBookB() {
         Book book = Book.builder()
-                .isbn("3456")
-                .authorId(1L)
+                .isbn("2345")
+                .authorId(2L)
                 .title("The Best Book")
                 .build();
         return book;
     }
     public static Book createTestBookC() {
         Book book = Book.builder()
-                .isbn("4567")
-                .authorId(1L)
+                .isbn("3456")
+                .authorId(3L)
                 .title("The Best Book")
                 .build();
         return book;

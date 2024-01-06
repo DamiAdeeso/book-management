@@ -43,7 +43,7 @@ public class BookDaoImplTest {
     public void testThatFindOneReturnsCorrectSql(){
         underTest.find0ne("1234");
 
-        verify(jdbcTemplate).query(eq("SELECT isbn, title, author_id FROM books WHERE isbn = ? LIMIT 1"), ArgumentMatchers.<BookDaoImpl.BookClassMapper>any(),eq(1L));
+        verify(jdbcTemplate).query(eq("SELECT isbn, title, author_id FROM books WHERE isbn = ? LIMIT 1"), ArgumentMatchers.<BookDaoImpl.BookClassMapper>any(),eq("1234"));
     }
 
     @Test
@@ -53,4 +53,13 @@ public class BookDaoImplTest {
         verify(jdbcTemplate).query(eq("SELECT isbn, title, author_id FROM books"), ArgumentMatchers.<BookDaoImpl.BookClassMapper>any());
     }
 
+    @Test
+    public void testThatUpdateBookGeneratesCorrectSQL(){
+        Book book = TestDataUtil.createTestBookA();
+
+        underTest.update("1234",book);
+        verify(jdbcTemplate).update("UPDATE SET isbn = ?, title = ?, author_id =? WHERE isbn = ?"
+        ,"1234","The Best Book", 1L, book.getIsbn());
+
+    }
 }

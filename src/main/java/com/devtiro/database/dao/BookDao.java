@@ -1,6 +1,5 @@
 package com.devtiro.database.dao;
 
-import com.devtiro.database.domain.Author;
 import com.devtiro.database.domain.Book;
 
 import java.util.List;
@@ -12,4 +11,6 @@ public interface BookDao {
     Optional<Book> find0ne(String isbn);
 
     List<Book> find();
+
+    void update(String isbn, Book book);
 }

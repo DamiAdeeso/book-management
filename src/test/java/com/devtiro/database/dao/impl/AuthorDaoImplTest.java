@@ -58,7 +58,7 @@ public class AuthorDaoImplTest {
         Author author = TestDataUtil.createTestAuthorA();
         underTest.update(author.getId(), author);
 
-        verify(jdbcTemplate).update("Update authors SET id = ?, name = ?, age = ?", 1L, "Abigail Rose", 80);
+        verify(jdbcTemplate).update("Update authors SET id = ?, name = ?, age = ? WHERE id = ?", 1L, "Abigail Rose", 80, author.getId());
 
 
     }

@@ -22,11 +22,11 @@ public class BookDaoImplIntegrationTests {
 
     private BookDaoImpl underTest;
 
-    private AuthorDaoImpl authorTest;
+    private AuthorDaoImpl authorDao;
 
     @Autowired
     public BookDaoImplIntegrationTests (BookDaoImpl underTest , AuthorDaoImpl authorTest){
-        this.authorTest = authorTest;
+        this.authorDao = authorTest;
         this.underTest = underTest;
     }
 
@@ -34,7 +34,7 @@ public class BookDaoImplIntegrationTests {
     public void  testThatBookCanBeCreatedAndRecalled(){
         Author author = TestDataUtil.createTestAuthorA();
 
-        authorTest.create(author);
+        authorDao.create(author);
 
         Book book = TestDataUtil.createTestBookA();
        book.setAuthorId(author.getId());
@@ -52,7 +52,7 @@ public class BookDaoImplIntegrationTests {
     public void testThatMultipleBooksCanBeCreatedAndRecalled(){
 
         Author author = TestDataUtil.createTestAuthorB();
-        authorTest.create(author);
+        authorDao.create(author);
         Book bookA =TestDataUtil.createTestBookA();
         bookA.setAuthorId(author.getId());
         underTest.create(bookA);
@@ -74,5 +74,17 @@ public class BookDaoImplIntegrationTests {
     }
 
 
+@Test
+    public void testThatBookCanBeUpdated(){
+        Author author = TestDataUtil.createTestAuthorA();
+        authorDao.create(author);
+
+        Book book = TestDataUtil.createTestBookA();
+        book.setAuthorId(author.getId());
+        underTest.create(book);
+
+        book.setTitle("Updated");
+        underTest.update(book.getIsbn(),book);
+}
 
 }

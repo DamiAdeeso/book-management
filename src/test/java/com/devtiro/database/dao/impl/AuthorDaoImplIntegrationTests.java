@@ -21,41 +21,40 @@ public class AuthorDaoImplIntegrationTests {
     private AuthorDaoImpl underTest;
 
     @Autowired
-    public AuthorDaoImplIntegrationTests(AuthorDaoImpl underTest){
+    public AuthorDaoImplIntegrationTests(AuthorDaoImpl underTest) {
         this.underTest = underTest;
     }
 
 
-
     @Test
-    public void testThatAuthorCanBeCreatedAndRecalled(){
-        Author author =  TestDataUtil.createTestAuthorA();
+    public void testThatAuthorCanBeCreatedAndRecalled() {
+        Author author = TestDataUtil.createTestAuthorA();
         underTest.create(author);
-        Optional<Author> result =underTest.findOne(author.getId());
+        Optional<Author> result = underTest.findOne(author.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(author);
     }
 
     @Test
-    public void testThatMultipleAuthorsCanBeCreatedAndRecalled(){
-        Author authorA  = TestDataUtil.createTestAuthorA();
+    public void testThatMultipleAuthorsCanBeCreatedAndRecalled() {
+        Author authorA = TestDataUtil.createTestAuthorA();
         underTest.create(authorA);
         Author authorB = TestDataUtil.createTestAuthorB();
         underTest.create(authorB);
         Author authorC = TestDataUtil.createTestAuthorC();
         underTest.create(authorC);
 
-        List<Author> results  =  underTest.find();
+        List<Author> results = underTest.find();
 
         assertThat(results).hasSize(3)
-                .containsExactly(authorA,authorB,authorC);
+                .containsExactly(authorA, authorB, authorC);
 
 
     }
 
     @Test
-    public void testThatAuthorCanBeUpdated(){
-        Author authorA  = TestDataUtil.createTestAuthorA();
+    public void testThatAuthorCanBeUpdated() {
+        Author authorA = TestDataUtil.createTestAuthorA();
         underTest.create(authorA);
 
         authorA.setName("Updated");
@@ -70,3 +69,4 @@ public class AuthorDaoImplIntegrationTests {
     }
 
 }
+
