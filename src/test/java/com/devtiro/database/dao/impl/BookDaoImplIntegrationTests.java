@@ -1,6 +1,7 @@
 package com.devtiro.database.dao.impl;
 
 import com.devtiro.database.TestDataUtil;
+import com.devtiro.database.dao.AuthorDao;
 import com.devtiro.database.domain.Author;
 import com.devtiro.database.domain.Book;
 import org.junit.jupiter.api.Test;
@@ -85,6 +86,26 @@ public class BookDaoImplIntegrationTests {
 
         book.setTitle("Updated");
         underTest.update(book.getIsbn(),book);
+
+        Optional<Book> result = underTest.find0ne(book.getIsbn());
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(book);
+}
+
+@Test
+    public void testThatBookCanBeDeleted(){
+        Author author = TestDataUtil.createTestAuthorA();
+        authorDao.create(author);
+
+        Book book = TestDataUtil.createTestBookA();
+        book.setAuthorId(author.getId());
+        underTest.create(book);
+
+        underTest.delete(book.getIsbn());
+
+        Optional<Book> result = underTest.find0ne(book.getIsbn());
+
+        assertThat(result).isEmpty();
 }
 
 }

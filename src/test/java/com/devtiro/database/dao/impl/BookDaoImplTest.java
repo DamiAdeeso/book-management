@@ -58,8 +58,19 @@ public class BookDaoImplTest {
         Book book = TestDataUtil.createTestBookA();
 
         underTest.update("1234",book);
-        verify(jdbcTemplate).update("UPDATE SET isbn = ?, title = ?, author_id =? WHERE isbn = ?"
+        verify(jdbcTemplate).update("UPDATE books SET  isbn = ?, title = ?, author_id =? WHERE isbn = ?"
         ,"1234","The Best Book", 1L, book.getIsbn());
 
+
+
     }
+
+    @Test
+    public void testThatDeleteBookGeneratesCorrectSql(){
+        Book book = TestDataUtil.createTestBookA();
+
+        underTest.delete("1234");
+        verify(jdbcTemplate).update("DELETE FROM books WHERE isbn = ? ", "1234");
+    }
+
 }
