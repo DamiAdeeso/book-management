@@ -5,9 +5,7 @@ import com.devtiro.database.domain.dto.AuthorDto;
 import com.devtiro.database.domain.entities.AuthorEntity;
 import com.devtiro.database.domain.mappers.Mapper;
 import com.devtiro.database.services.AuthorService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthorController {
@@ -28,4 +26,11 @@ public class AuthorController {
 
         return authorMapper.mapTo(savedAuthorEntity);
     }
+
+    @PutMapping(path = "/authors")
+    public AuthorDto updateAuthor(@RequestBody AuthorDto author, @RequestParam String id){
+
+        return new AuthorDto();
+    }
+
 }
