@@ -5,32 +5,27 @@ import com.devtiro.database.domain.dto.AuthorDto;
 import com.devtiro.database.domain.entities.AuthorEntity;
 import com.devtiro.database.domain.mappers.Mapper;
 import com.devtiro.database.services.AuthorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthorController {
 
-    public AuthorService authorService;
+    private AuthorService authorService;
+
     private Mapper<AuthorEntity, AuthorDto> authorMapper;
 
-    AuthorController(AuthorService authorService, Mapper<AuthorEntity, AuthorDto> authorMapper){
+    public AuthorController(AuthorService authorService, Mapper<AuthorEntity, AuthorDto> authorMapper) {
         this.authorService = authorService;
         this.authorMapper = authorMapper;
     }
 
-
     @PostMapping(path = "/authors")
-    public AuthorDto createAuthor(@RequestBody AuthorDto author){
+    public ResponseEntity<AuthorDto> createAuthor(@RequestBody AuthorDto author) {
         AuthorEntity authorEntity = authorMapper.mapFrom(author);
-        AuthorEntity savedAuthorEntity = authorService.createAuthor(authorEntity);
-
-        return authorMapper.mapTo(savedAuthorEntity);
+        AuthorEntity savedAuthorEntity = authorService.save(authorEntity);
+        return new ResponseEntity<>(authorMapper.mapTo(savedAuthorEntity), HttpStatus.CREATED);
     }
-
-    @PutMapping(path = "/authors")
-    public AuthorDto updateAuthor(@RequestBody AuthorDto author, @RequestParam String id){
-
-        return new AuthorDto();
-    }
-
 }

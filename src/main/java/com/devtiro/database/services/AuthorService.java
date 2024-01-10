@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 public interface AuthorService {
 
 
-    public AuthorEntity createAuthor(AuthorEntity authorEntity);
+    public AuthorEntity save(AuthorEntity authorEntity);
 }
