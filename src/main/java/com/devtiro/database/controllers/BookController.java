@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class BookController {
 
@@ -26,5 +28,10 @@ public class BookController {
         BookEntity savedBook = bookService.save(bookEntity, isbn);
         BookDto  savedBookDto = bookMapper.mapTo(savedBook);
         return new ResponseEntity<>(savedBookDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/books")
+    public List<BookDto> listBooks(){
+        List<BookEntity> book = bookService.fi
     }
 }
