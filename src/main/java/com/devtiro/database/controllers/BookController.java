@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class BookController {
@@ -32,6 +33,10 @@ public class BookController {
 
     @GetMapping(path = "/books")
     public List<BookDto> listBooks(){
-        List<BookEntity> book = bookService.fi
+        List<BookEntity> books = bookService.findAll();
+
+        return books.stream()
+                .map(bookMapper :: mapTo)
+                .collect(Collectors.toList());
     }
 }

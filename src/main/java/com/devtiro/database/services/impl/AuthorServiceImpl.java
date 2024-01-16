@@ -2,11 +2,13 @@ package com.devtiro.database.services.impl;
 
 import com.devtiro.database.domain.dto.AuthorDto;
 import com.devtiro.database.domain.entities.AuthorEntity;
+import com.devtiro.database.domain.mappers.Mapper;
 import com.devtiro.database.repositories.AuthorRepository;
 import com.devtiro.database.services.AuthorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -15,8 +17,12 @@ public class AuthorServiceImpl implements AuthorService {
 
     private AuthorRepository authorRepository;
 
-    public AuthorServiceImpl(AuthorRepository authorRepository){
+    private Mapper<AuthorEntity, AuthorDto> authorMapper;
+
+    public AuthorServiceImpl(AuthorRepository authorRepository, Mapper<AuthorEntity, AuthorDto> authorMapper){
+
         this.authorRepository = authorRepository;
+        this.authorMapper = authorMapper;
     }
 
 
@@ -32,5 +38,10 @@ public class AuthorServiceImpl implements AuthorService {
                        .spliterator(),
                        false)
                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<AuthorEntity> findOne(long id) {
+       return authorRepository.findById(id);
     }
 }

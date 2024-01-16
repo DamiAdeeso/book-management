@@ -1,7 +1,11 @@
 package com.devtiro.database.packages.controllers;
 
 import com.devtiro.database.TestDataUtil;
+import com.devtiro.database.domain.dto.AuthorDto;
 import com.devtiro.database.domain.dto.BookDto;
+import com.devtiro.database.domain.entities.AuthorEntity;
+import com.devtiro.database.domain.entities.BookEntity;
+import com.devtiro.database.services.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +27,13 @@ public class BookControllerIntegrationTests {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
 
+    private final BookService bookService;
+
     @Autowired
-    public BookControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper) {
+    public BookControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper, BookService bookService) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
+        this.bookService = bookService;
     }
 
     @Test
@@ -45,4 +52,31 @@ public class BookControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.title").value(bookDto.getTitle())
         );
     }
+    @Test
+    public void testThatListBooksReturnHttpStatus200() throws Exception {
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/books")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+    @Test
+    public void testThatListAuthorReturnsListOfAuthors() throws Exception {
+        BookEntity book = TestDataUtil.createTestBookA(null);
+        bookService.save(book, book.getIsbn() );
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(
+                                "/books"
+                        ).contentType(MediaType.APPLICATION_JSON_VALUE)
+
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].isbn").value("1234")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].title").value("The Best Book")
+        );
+    }
+
+
 }

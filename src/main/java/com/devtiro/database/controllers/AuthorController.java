@@ -5,12 +5,13 @@ import com.devtiro.database.domain.dto.AuthorDto;
 import com.devtiro.database.domain.entities.AuthorEntity;
 import com.devtiro.database.domain.mappers.Mapper;
 import com.devtiro.database.services.AuthorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,6 +39,17 @@ public class AuthorController {
         return authors.stream()
                 .map(authorMapper::mapTo)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping(path ="/authors/{id}")
+    public ResponseEntity<AuthorDto> getAuthorById(@PathVariable("id" ) Long id){
+        Optional<AuthorEntity> foundAuthor = authorService.findOne(id);
+
+        return foundAuthor.map(authorEntity -> {
+            AuthorDto authorDto = authorMapper.mapTo(authorEntity);
+
+            return new ResponseEntity<>(authorDto,HttpStatus.OK);
+        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 }
