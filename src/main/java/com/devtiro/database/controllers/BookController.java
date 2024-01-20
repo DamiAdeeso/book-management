@@ -1,15 +1,18 @@
 package com.devtiro.database.controllers;
 
+import com.devtiro.database.domain.dto.AuthorDto;
 import com.devtiro.database.domain.dto.BookDto;
 import com.devtiro.database.domain.entities.BookEntity;
 import com.devtiro.database.domain.mappers.Mapper;
 import com.devtiro.database.services.BookService;
 import com.devtiro.database.services.impl.BookServiceImpl;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,5 +41,15 @@ public class BookController {
         return books.stream()
                 .map(bookMapper :: mapTo)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping(path = "/books/{isbn}")
+    public ResponseEntity<BookDto> getBook(@PathVariable(name="isbn") String isbn ){
+        Optional<BookEntity> foundBook =bookService.findOne(isbn);
+        return foundBook.map(bookEntity -> {
+            BookDto bookDto = bookMapper.mapTo(bookEntity);
+
+            return new ResponseEntity<>(bookDto,HttpStatus.OK);
+        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
