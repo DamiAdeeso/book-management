@@ -21,7 +21,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public BookEntity save(BookEntity book, String isbn) {
+    public BookEntity createUpdateBook(BookEntity book, String isbn) {
         book.setIsbn(isbn);
         BookEntity savedBook = bookRepository.save(book);
 

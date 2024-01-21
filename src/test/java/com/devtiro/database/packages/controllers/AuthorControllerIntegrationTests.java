@@ -160,9 +160,8 @@ public class AuthorControllerIntegrationTests {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(authorDtoJson)).
                 andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("updated"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(savedAuthor.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(savedAuthor.getName()));
 
     }
-
-
 }

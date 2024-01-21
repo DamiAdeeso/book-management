@@ -1,12 +1,9 @@
 package com.devtiro.database.controllers;
 
-import com.devtiro.database.domain.dto.AuthorDto;
 import com.devtiro.database.domain.dto.BookDto;
 import com.devtiro.database.domain.entities.BookEntity;
 import com.devtiro.database.domain.mappers.Mapper;
 import com.devtiro.database.services.BookService;
-import com.devtiro.database.services.impl.BookServiceImpl;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +24,18 @@ public class BookController {
     }
 
     @PutMapping("/books/{isbn}")
-    public ResponseEntity<BookDto>  createBook(@PathVariable("isbn") String isbn ,@RequestBody BookDto bookDto){
-        BookEntity bookEntity  = bookMapper.mapFrom(bookDto);
-        BookEntity savedBook = bookService.save(bookEntity, isbn);
-        BookDto  savedBookDto = bookMapper.mapTo(savedBook);
-        return new ResponseEntity<>(savedBookDto, HttpStatus.CREATED);
+    public ResponseEntity<BookDto>  createUpdateBook(@PathVariable("isbn") String isbn ,@RequestBody BookDto bookDto){
+        BookEntity bookEntity = bookMapper.mapFrom(bookDto);
+        boolean bookExists = bookService.isExists(isbn);
+        BookEntity savedBook = bookService.createUpdateBook(bookEntity, isbn);
+        BookDto savedBookDto = bookMapper.mapTo(savedBook);
+       if(bookExists){
+           return new ResponseEntity<>(savedBookDto, HttpStatus.OK);
+       }else {
+
+          
+           return new ResponseEntity<>(savedBookDto, HttpStatus.CREATED);
+       }
     }
 
     @GetMapping(path = "/books")

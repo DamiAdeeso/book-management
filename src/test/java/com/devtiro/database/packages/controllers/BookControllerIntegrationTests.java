@@ -1,9 +1,7 @@
 package com.devtiro.database.packages.controllers;
 
 import com.devtiro.database.TestDataUtil;
-import com.devtiro.database.domain.dto.AuthorDto;
 import com.devtiro.database.domain.dto.BookDto;
-import com.devtiro.database.domain.entities.AuthorEntity;
 import com.devtiro.database.domain.entities.BookEntity;
 import com.devtiro.database.services.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,7 +62,7 @@ public class BookControllerIntegrationTests {
     @Test
     public void testThatListAuthorReturnsListOfAuthors() throws Exception {
         BookEntity book = TestDataUtil.createTestBookA(null);
-        bookService.save(book, book.getIsbn() );
+        bookService.createUpdateBook(book, book.getIsbn() );
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get(
@@ -81,7 +79,7 @@ public class BookControllerIntegrationTests {
     @Test
     public void testThatFindBookReturnHttpStatus200() throws Exception {
     BookEntity bookEntity = TestDataUtil.createTestBookA(null);
-    bookService.save(bookEntity,"1234");
+    bookService.createUpdateBook(bookEntity,"1234");
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/books/1234")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -99,7 +97,7 @@ public class BookControllerIntegrationTests {
     @Test
     public void testThatGetAuthorReturnsCorrectBook() throws Exception{
         BookEntity bookEntity =TestDataUtil.createTestBookA(null);
-        bookService.save(bookEntity,"1234");
+        bookService.createUpdateBook(bookEntity,"1234");
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/books/1234")
                                 .contentType(MediaType.APPLICATION_JSON))
