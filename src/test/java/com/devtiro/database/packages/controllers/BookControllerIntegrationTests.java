@@ -78,5 +78,33 @@ public class BookControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatFindBookReturnHttpStatus200() throws Exception {
+    BookEntity bookEntity = TestDataUtil.createTestBookA(null);
+    bookService.save(bookEntity,"1234");
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/books/1234")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
+    }
+    @Test
+    public void testThatListBooksReturnHttpStatus404() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/books/1234")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
+    }
+    @Test
+    public void testThatGetAuthorReturnsCorrectBook() throws Exception{
+        BookEntity bookEntity =TestDataUtil.createTestBookA(null);
+        bookService.save(bookEntity,"1234");
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/books/1234")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.isbn").value("1234"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("The Best Book")
+                );
+    }
 }

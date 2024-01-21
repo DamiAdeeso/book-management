@@ -1,13 +1,12 @@
 package com.devtiro.database.services.impl;
 
-import com.devtiro.database.domain.dto.BookDto;
 import com.devtiro.database.domain.entities.BookEntity;
 import com.devtiro.database.repositories.BookRepository;
 import com.devtiro.database.services.BookService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collector;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -35,6 +34,11 @@ public class BookServiceImpl implements BookService {
                 .stream(bookRepository.findAll().spliterator()
                         , false
                 ).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<BookEntity> findOne(String isbn) {
+        return bookRepository.findById(isbn);
     }
 
 
