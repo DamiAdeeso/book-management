@@ -14,5 +14,5 @@ public class AuthorDto {
 
     public String name;
 
-    public int Age;
+    public int age;
 }
