@@ -86,7 +86,7 @@ public class AuthorControllerIntegrationTests {
 @Test
     public void testThatFullUpdateAuthorRetrunsHttpStatus404WhenNoAuthorExists() throws Exception{
     mockMvc.perform(
-                    MockMvcRequestBuilders.put("/authors/567")
+                    MockMvcRequestBuilders.put("/authors/99")
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isNotFound());
 
