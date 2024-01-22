@@ -50,6 +50,43 @@ public class BookControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.title").value(bookDto.getTitle())
         );
     }
+
+    @Test
+    public void testThatUpdateBookReturnsHttpsStatus200() throws Exception{
+        BookEntity testBookEntity = TestDataUtil.createTestBookA(null);
+        BookEntity savedBookEntity = bookService.createUpdateBook(testBookEntity, testBookEntity.getIsbn());
+
+        BookDto testBookDto = TestDataUtil.createTestBookDtoA(null);
+        testBookDto.setIsbn(testBookEntity.getIsbn());
+        String bookJson = objectMapper.writeValueAsString(testBookDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/books/"+testBookEntity.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(bookJson)
+
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+    @Test
+    public void testThatUpdateBookReturnsUpdatedBook() throws Exception {
+        BookEntity testBookEntity = TestDataUtil.createTestBookA(null);
+        BookEntity savedBookEntity = bookService.createUpdateBook(testBookEntity, testBookEntity.getIsbn());
+
+        BookDto testBookDto = TestDataUtil.createTestBookDtoA(null);
+        testBookDto.setIsbn(testBookEntity.getIsbn());
+        testBookDto.setTitle("Updated");
+        String bookJson = objectMapper.writeValueAsString(testBookDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/books/"+testBookEntity.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(bookJson)
+
+        ).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Updated"));
+
+    }
     @Test
     public void testThatListBooksReturnHttpStatus200() throws Exception {
 
@@ -60,7 +97,7 @@ public class BookControllerIntegrationTests {
 
     }
     @Test
-    public void testThatListAuthorReturnsListOfAuthors() throws Exception {
+    public void testThatListBookReturnsListOfBooks() throws Exception {
         BookEntity book = TestDataUtil.createTestBookA(null);
         bookService.createUpdateBook(book, book.getIsbn() );
 
@@ -104,5 +141,38 @@ public class BookControllerIntegrationTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.isbn").value("1234"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("The Best Book")
                 );
+    }
+
+    @Test
+    public void testThatPartialUpdateReturnsHtppStatus200() throws Exception {
+        BookEntity testBookEntity = TestDataUtil.createTestBookA(null);
+        bookService.createUpdateBook(testBookEntity,"1234");
+
+        BookDto testBookDto = TestDataUtil.createTestBookDtoA(null);
+        testBookDto.setIsbn(testBookEntity.getIsbn());
+        testBookDto.setTitle("Updated");
+        String bookJson = objectMapper.writeValueAsString(testBookDto);
+        mockMvc.perform(
+                        MockMvcRequestBuilders.patch("/books/" + testBookEntity.getIsbn())
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+@Test
+    public void testThatDeleteNonExistingBookReturnsHttpsStatus204()throws Exception{
+    mockMvc.perform(
+                    MockMvcRequestBuilders.delete("/books/23" )
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNoContent());
+}
+    @Test
+    public void testThatDeleteExistingBookReturnsHttpsStatus204()throws Exception{
+        BookEntity bookEntity =TestDataUtil.createTestBookA(null);
+        bookService.createUpdateBook(bookEntity,"1234");
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/books/" +bookEntity.getIsbn() )
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }
