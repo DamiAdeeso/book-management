@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.farikinte</groupId>
-	<artifactId>Book Application</artifactId>
+	<artifactId>Book-Application</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Book Application</name>
 	<description>A Book Management Rest Api </description>

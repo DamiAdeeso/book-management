@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -19,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AuthorControllerIntegrationTests {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
@@ -73,7 +74,8 @@ public class AuthorControllerIntegrationTests {
 
     @Test
     public void testThatListAuthorsReturnHttpStatus200() throws Exception {
-
+        AuthorEntity author = TestDataUtil.createTestAuthorA();
+        authorService.save(author);
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/authors")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -90,11 +92,11 @@ public class AuthorControllerIntegrationTests {
                 .andExpect(MockMvcResultMatchers.status().isOk());
 }
     @Test
-    public void testThatGetAuthorReturnHttpStatus200WhenDoesNotExist() throws Exception{
+    public void testThatGetAuthorReturnHttpStatus404WhenDoesNotExist() throws Exception{
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/authors/1")
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
     @Test
     public void testThatGetAuthorReturnsCorrectAuthor() throws Exception{
@@ -160,8 +162,8 @@ public class AuthorControllerIntegrationTests {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(authorDtoJson)).
                 andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(savedAuthor.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(savedAuthor.getName()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testAuthorDtoA.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testAuthorDtoA.getName()));
 
     }
     @Test
